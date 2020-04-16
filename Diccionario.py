@@ -3,7 +3,6 @@
 import tkinter as TK
 from tkinter import messagebox
 from partials import *
-from wikipediaapi import Wikipedia
 import os
 
 ###  Variables ####
@@ -20,7 +19,7 @@ def main():
     labelTitular.pack()
     entryPalabra = TK.Entry(win, width=32)
     entryPalabra.pack(pady=pady)
-    btnTraducir = TK.Button(win, text="Traduce", width=15,command=lambda:mostrarDefinicion(entryPalabra.get()))
+    btnTraducir = TK.Button(win, text="Buscar", width=15,command=lambda:mostrarDefinicion(entryPalabra.get()))
     btnTraducir.pack()
     win.mainloop()
 
@@ -36,21 +35,9 @@ def DefinitionWin(titutlo,resultado):
     Titulo.pack(pady=2)
     definicionBody= TK.LabelFrame(Definition,bg=bg,text="definicion")
     definicionBody.pack(fill='both',expand='yes',padx=padx,pady=5)
-    textoBody = TK.Label(definicionBody,text=resultado,justify='center',bg=bg,fg='white',wraplength=350)
-    textoBody.pack(pady=2,padx=5)
+    textoBody = TK.Label(definicionBody,text=resultado,bg=bg,fg='white',wraplength=170)
+    textoBody.pack(pady=2,padx=1)
 ############# Funciones #########################
-def wikipedia_word_search(palabra):
-    palabra = str(palabra)
-    resultado = str()
-    try:
-        wiki = Wikipedia('es')
-        busqueda = wiki.page(palabra)
-        resultado = str(wiki.extracts(busqueda,exsentences=1))
-    except Exception as e:
-        print("No se pudo encontrar palabra")
-        ExceptionLogCreator(e)
-    return resultado
-
 def mostrarDefinicion(Palabra_Buscada):
         titulo = str(Palabra_Buscada)
         if(len(titulo)<1):
@@ -58,6 +45,7 @@ def mostrarDefinicion(Palabra_Buscada):
                                     message="Debe rellenar el campo d palabra")
         else:
             resultado=wikipedia_word_search(titulo)
+            print(resultado)
             DefinitionWin(titulo,resultado)
 main()
 
