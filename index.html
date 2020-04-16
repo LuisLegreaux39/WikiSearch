@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="//cdn.thisiswaldo.com" rel="dns-prefetch">
+    <link href="//fonts.googleapis.com" rel="dns-prefetch">
+
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<title>Text Translation with Google Translate API in Python</title>
+    <meta name="HandheldFriendly" content="True" />
+	<meta name="keywords" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<!-- fav icons -->
+	<link rel="shortcut icon" href="/favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png?v=5d0826e6f1">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32x32.png?v=5d0826e6f1">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-16x16.png?v=5d0826e6f1">
+    <!-- header scripts -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            setTimeout(function() {
+                var e = document.createElement("script");
+                e.type="text/javascript",
+                e.src="//cdn.thisiswaldo.com/static/js/3873.js",
+                document.getElementsByTagName("head")[0].appendChild(e);
+            }, 1000);
+        }, false);
+    </script>
+	<!-- stylesheets -->
+    <link href="//fonts.googleapis.com/css?family=Nunito:400,400i,700,700i&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="/assets/css/bootstrap.min.css?v=5d0826e6f1">
+	<link rel="stylesheet" href="/assets/css/font-awesome.min.css?v=5d0826e6f1">
+	<link rel="stylesheet" type="text/css" href="/assets/css/screen.css?v=5d0826e6f1">
+	<link rel="stylesheet" type="text/css" href="/assets/css/hl-styles/atom_one_dark.css?v=5d0826e6f1">
+	<script>
+/*====================================================
+  THEME SETTINGS & GLOBAL VARIABLES
+====================================================*/
+//  1. Disqus comment settings
+var disqus_shortname = 'stackabuse'; // required: replace example with your forum shortname
+
+//	2. Sidebar Position
+var sidebar_left = false; // Set true or flase for positioning sidebar on left
+
+//  3. Recent Post count
+var recent_post_count = 3;
+
+//	4. Google+ badge settings
+var badge_type = 'page'; // person / page / community ----- three type of google badge
+var google_plus_url = 'https://plus.google.com/111813546240107028721';
+
+//	5. Facebook Page Setting
+var facebook_page_url = 'https://www.facebook.com/stackabuse';
+
+//	6. Twitter Setting
+var twitter_url = 'https://twitter.com/ScottWRobinson';
+var twitter_widget_id = '722928793669607425';
+var number_of_tweet = 3;
+
+//	7. Mailchimp signup form Setting
+var mailchimp_form_url = '//stackabuse.us10.list-manage.com/subscribe/post?u=90b216fdbe02b25619ec94fc3&amp;id=bc2bb312cd';
+var success_message = "Please check your inbox and confirm your email address. Thank you!";
+
+//	8. Flickr Setting
+//var flickr_id = '52617155@N08';
+var flickr_id = '';
+</script>
+    <meta name="description" content="You could translate anything by simply going to the Google Translate web page, though you can also integrate the Google Translate API in your own application." />
+    <link rel="shortcut icon" href="/favicon.png" type="image/png" />
+    <link rel="canonical" href="https://stackabuse.com/text-translation-with-google-translate-api-in-python/" />
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+    
+    <meta property="og:site_name" content="Stack Abuse" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Text Translation with Google Translate API in Python" />
+    <meta property="og:description" content="Unless you have been hiding under a rock, you have probably used Google
+Translate [https://translate.google.com/]  on many occasions in your life.
+Whenever you try to translate a word or a sentence from a certain language to
+another, it is the Google Translate API which brings you the desired results in
+the background. Though you can translate anything by simply going to the Google
+Translate web page, you can also integrate Google Translate API
+[https://pypi.org/project/googletrans/]  into your " />
+    <meta property="og:url" content="https://stackabuse.com/text-translation-with-google-translate-api-in-python/" />
+    <meta property="article:tag" content="python" />
+    <meta property="article:tag" content="tool" />
+    
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Text Translation with Google Translate API in Python" />
+    <meta name="twitter:description" content="Unless you have been hiding under a rock, you have probably used Google
+Translate [https://translate.google.com/]  on many occasions in your life.
+Whenever you try to translate a word or a sentence from a certain language to
+another, it is the Google Translate API which brings you the desired results in
+the background. Though you can translate anything by simply going to the Google
+Translate web page, you can also integrate Google Translate API
+[https://pypi.org/project/googletrans/]  into your " />
+    <meta name="twitter:url" content="https://stackabuse.com/text-translation-with-google-translate-api-in-python/" />
+    <meta name="twitter:label1" content="Written by" />
+    <meta name="twitter:data1" content="Guest Contributor" />
+    <meta name="twitter:label2" content="Filed under" />
+    <meta name="twitter:data2" content="python, tool" />
+    <meta name="twitter:site" content="@ScottWRobinson" />
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Stack Abuse",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://stackabuse.com/favicon.png",
+            "width": 60,
+            "height": 60
+        }
+    },
+    "author": {
+        "@type": "Person",
+        "name": "Guest Contributor",
+        "url": "https://stackabuse.com/author/guest/",
+        "sameAs": []
+    },
+    "headline": "Text Translation with Google Translate API in Python",
+    "url": "https://stackabuse.com/text-translation-with-google-translate-api-in-python/",
+    "keywords": "python, tool",
+    "description": "Unless you have been hiding under a rock, you have probably used Google\nTranslate [https://translate.google.com/]  on many occasions in your life.\nWhenever you try to translate a word or a sentence from a certain language to\nanother, it is the Google Translate API which brings you the desired results in\nthe background. Though you can translate anything by simply going to the Google\nTranslate web page, you can also integrate Google Translate API\n[https://pypi.org/project/googletrans/]  into your ",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://stackabuse.com/"
+    }
+}
+    </script>
+
+    <meta name="generator" content="Ghost 2.23" />
+    <link rel="alternate" type="application/rss+xml" title="Stack Abuse" href="https://stackabuse.com/rss/" />
+    <!-- Repixel Code -->
+<script>
+  (function(w, d, s, id, src){
+  w.Repixel = r = {
+    init: function(id) {
+      w.repixelId = id;
+    }
+  };
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)){ return; }
+  js = d.createElement(s); 
+  js.id = id;
+  js.async = true;
+  js.onload = function(){
+      Repixel.init(w.repixelId);
+  };
+  js.src = src;
+  fjs.parentNode.insertBefore(js, fjs);
+  }(window, document, 'script', 'repixel', 
+  'https://sdk.repixel.co/r.js'));
+  Repixel.init('5cefff7fce3aad00089e44e5');
+</script>
+<!-- Repixel Code -->
+</head>
+<body class="post-template tag-python tag-tool">
+	<nav class="navbar navbar-default navbar-static-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <i class="fa fa-bars"></i>
+      </button>
+      <a class="navbar-brand" href="/">Stack <span style="color:#f16334;">Abuse</span></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav" role="navigation" aria-label="Site navigation">
+	<li class="nav-node-js"><a href="https://stackabuse.com/tag/node/">Node.js</a></li>
+	<li class="nav-python"><a href="https://stackabuse.com/tag/python">Python</a></li>
+	<li class="nav-java"><a href="https://stackabuse.com/tag/java/">Java</a></li>
+    <li class="nav-hireremote">
+        <a rel="noopener nofollow" target="_blank" href="https://hireremote.io/"
+           ga-on="click"
+           ga-event-category="Jobs"
+           ga-event-action="Click"
+           ga-event-label="HR-Nav-Link"
+        >
+            Jobs
+        </a>
+    </li>
+</ul>
+
+      <!--<ul class="nav navbar-nav pull-right">
+        <li role="presentation">
+          <a class="btn btn-success nav-btn" href="http://jobs.stackabuse.com">Find a Job</a>
+        </li>
+        <li role="presentation">
+          <a class="btn btn-danger nav-btn" href="http://jobs.stackabuse.com/post">Post a Job</a>
+        </li>
+      </ul>-->
+    </div><!--/.nav-collapse -->
+  </div>
+</nav>
+	<!-- start site's main content area -->
+<section class="content-wrap">
+	<div class="container">
+		<div class="row">
+			<!-- start main post area -->
+			<div class="col-md-8 main-content">
+				<!-- start post -->
+				<article id="5e21eb96d2e0df6b526df6f6" class="post tag-python tag-tool">
+					<div class="post-head">
+						<h2 class="post-title">Text Translation with Google Translate API in Python</h2>
+						<div class="post-meta">
+							<span class="author">
+                                By
+                                Guest Contributor
+                            </span> &bull;
+							<span class="comment-count"><a href="/text-translation-with-google-translate-api-in-python/#disqus_thread">0 Comments</a></span>
+						</div>
+					</div>
+                    <div class="post-ad">
+                        <!-- 728x90/320x50 -->
+<div id="waldo-tag-3878"></div>                    </div>
+					<div class="post-content">
+						<!--kg-card-begin: markdown--><p>Unless you have been hiding under a rock, you have probably used <a rel="nofollow noopener" target="_blank" href="https://translate.google.com/">Google Translate</a> on many occasions in your life. Whenever you try to translate a word or a sentence from a certain language to another, it is the Google Translate API which brings you the desired results in the background. Though you can translate anything by simply going to the Google Translate web page, you can also integrate <a rel="nofollow noopener" target="_blank" href="https://pypi.org/project/googletrans/">Google Translate API</a> into your web applications or desktop programs. The best thing about the API is that it is extremely easy to set up and use.</p>
+<p>You can actually do a lot of things with the help of the Google Translate API ranging from detecting languages to simple text translation, setting source and destination languages, and translating entire lists of text phrases. In this article, you will see how to work with the Google Translate API in the Python programming language.</p>
+<h3 id="googletranslateapiinstallation">Google Translate API Installation</h3>
+<p>Before you can work with the Google Translate API in Python, you will have to install it. There are two different methods of installing the API. The first method is straight forward. Simply go to terminal and use the <code>pip</code> installer to install the API, as you would for any other Python library. To do this, type the following command in your terminal:</p>
+<pre><code class="language-console">$ pip install googletrans
+</code></pre>
+<p>Press <kbd>Enter</kbd> and the Python module for Google Translate API will be installed on your system.</p>
+<p>If you have installed an Anaconda distribution of Python, you can install the API using the Anaconda Prompt. In this particular method, you will replace <code>pip</code> in the above command with <code>conda</code>, as shown in the following code snippet:</p>
+<pre><code class="language-console">$ conda install googletrans
+</code></pre>
+<p>Now that you have installed the API, we will see it in action with the help of some examples.</p>
+<h3 id="listingsupportedlanguages">Listing Supported Languages</h3>
+<p>The Google Translate API supports a variety of languages. To list all the supported languages, run the following script:</p>
+<pre><code class="language-python">import googletrans
+
+print(googletrans.LANGUAGES)
+</code></pre>
+<p>In the above example, you use the keyword <code>import</code> to import the <code>googletrans</code> module. Subsequently, you can list all the language names by printing the <code>LANGUAGES</code> attribute of the <code>googletrans</code> module.</p>
+<p>When executed, the above piece of code will list all the supported languages names along with their shorthand notation. Here is how the output will look:</p>
+<pre><code class="language-plaintext">{'af': 'afrikaans', 'sq': 'albanian', 'am': 'amharic', 'ar': 'arabic', 'hy': 'armenian', 'az': 'azerbaijani', 'eu': 'basque', 'be': 'belarusian', 'bn': 'bengali', 'bs': 'bosnian', 'bg': 'bulgarian', 'ca': 'catalan', 'ceb': 'cebuano', 'ny': 'chichewa', 'zh-cn': 'chinese (simplified)', 'zh-tw': 'chinese (traditional)', 'co': 'corsican', 'hr': 'croatian', 'cs': 'czech', 'da': 'danish', 'nl': 'dutch', 'en': 'english', 'eo': 'esperanto', 'et': 'estonian', 'tl': 'filipino', 'fi': 'finnish', 'fr': 'french', 'fy': 'frisian', 'gl': 'galician', 'ka': 'georgian', 'de': 'german', 'el': 'greek', 'gu': 'gujarati', 'ht': 'haitian creole', 'ha': 'hausa', 'haw': 'hawaiian', 'iw': 'hebrew', 'hi': 'hindi', 'hmn': 'hmong', 'hu': 'hungarian', 'is': 'icelandic', 'ig': 'igbo', 'id': 'indonesian', 'ga': 'irish', 'it': 'italian', 'ja': 'japanese', 'jw': 'javanese', 'kn': 'kannada', 'kk': 'kazakh', 'km': 'khmer', 'ko': 'korean', 'ku': 'kurdish (kurmanji)', 'ky': 'kyrgyz', 'lo': 'lao', 'la': 'latin', 'lv': 'latvian', 'lt': 'lithuanian', 'lb': 'luxembourgish', 'mk': 'macedonian', 'mg': 'malagasy', 'ms': 'malay', 'ml': 'malayalam', 'mt': 'maltese', 'mi': 'maori', 'mr': 'marathi', 'mn': 'mongolian', 'my': 'myanmar (burmese)', 'ne': 'nepali', 'no': 'norwegian', 'ps': 'pashto', 'fa': 'persian', 'pl': 'polish', 'pt': 'portuguese', 'pa': 'punjabi', 'ro': 'romanian', 'ru': 'russian', 'sm': 'samoan', 'gd': 'scots gaelic', 'sr': 'serbian', 'st': 'sesotho', 'sn': 'shona', 'sd': 'sindhi', 'si': 'sinhala', 'sk': 'slovak', 'sl': 'slovenian', 'so': 'somali', 'es': 'spanish', 'su': 'sundanese', 'sw': 'swahili', 'sv': 'swedish', 'tg': 'tajik', 'ta': 'tamil', 'te': 'telugu', 'th': 'thai', 'tr': 'turkish', 'uk': 'ukrainian', 'ur': 'urdu', 'uz': 'uzbek', 'vi': 'vietnamese', 'cy': 'welsh', 'xh': 'xhosa', 'yi': 'yiddish', 'yo': 'yoruba', 'zu': 'zulu', 'fil': 'Filipino', 'he': 'Hebrew'}
+</code></pre>
+<h3 id="basicuse">Basic Use</h3>
+<p>The most basic use of the Google Translate API is, of course, translating words or sentences from one language into another. To do so, we have to import the <code>Translator</code> class from <code>googletrans</code> module.</p>
+<pre><code class="language-python">from googletrans import Translator
+</code></pre>
+<p>Next, you have to create an object of the <code>Translator</code> class.</p>
+<pre><code class="language-python">translator = Translator()
+</code></pre>
+<p>Once the Translator class object is created, you will pass the text in source language as a parameter to the <code>translate()</code> method of the <code>Translator()</code> class object, as shown below:</p>
+<pre><code class="language-python">result = translator.translate('Mitä sinä teet')
+</code></pre>
+<p>In the script above, we pass Finnish text to the <code>translate()</code> method.</p>
+<p>The <code>translate()</code> method returns an object that contains information about the translated text, the source and destination languages and the pronunciation of the text. By default, the <code>translate()</code> method returns the English translation of the text passed to it. In our case, the object returned by the <code>translate()</code> method is stored in the <code>result</code> variable.</p>
+<p>The object returned by the <code>translate()</code> method has the following attributes:</p>
+<ul>
+<li><code>src</code>: The source language</li>
+<li><code>dest</code>: Destination language, which is set to English (en)</li>
+<li><code>origin</code>: Original text, that is 'Mitä sinä teet' in our example</li>
+<li><code>text</code>: Translated text, that will be 'what are you doing?' in our case</li>
+<li><code>pronunciation</code>: Pronunciation of the translated text</li>
+</ul>
+<p>Let's print all the above attributes and see what output we get:</p>
+<pre><code class="language-python">print(result.src)
+print(result.dest)
+print(result.origin)
+print(result.text)
+print(result.pronunciation)
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code class="language-plaintext">fi
+en
+Mitä sinä teet
+What are you doing
+What are you doing
+</code></pre>
+<p>The output shows that the source language is Finnish (fi) and the destination language is English (en). The translated sentence can be printed via the <code>text</code> attribute.</p>
+<p>In the above example, we did not specify the source language. Therefore, Google Translate API tries to detect source language itself. Similarly, we did not specify any destination language as well and thus, the API translated the source language into the default language that is English. But, what if you want to specify both the source and destination languages?</p>
+<h3 id="specifyingsourceanddestinationlanguages">Specifying Source and Destination Languages</h3>
+<p>It is in fact, very easy to specify both the destination and source languages in the Google Translate API. Here is the code you'll use to pass only the source language:</p>
+<pre><code class="language-python">result = translator.translate('Mikä on nimesi', src='fi')
+</code></pre>
+<p>For adding destination language only, you have to add <code>dest</code> attribute, followed by the language code:</p>
+<pre><code class="language-python">result = translator.translate('Mikä on nimesi', dest='fr')
+</code></pre>
+<p>You can also pass the source and destination languages at the same time:</p>
+<pre><code class="language-python">result = translator.translate('Mikä on nimesi', src='fi', dest='fr')
+</code></pre>
+<p>Let's now translate a Finnish sentence into French and then print the source and destination languages, as well as the translated text. This time we will specify the source and destination languages.</p>
+<pre><code class="language-python">from googletrans import Translator
+
+translator = Translator()
+result = translator.translate('Mikä on nimesi', src='fi', dest='fr')
+
+print(result.src)
+print(result.dest)
+print(result.text)
+</code></pre>
+<p>The above piece of code will produce the following result.</p>
+<pre><code class="language-plaintext">fi
+fr
+Quel est votre nom
+</code></pre>
+<h3 id="translatinglistofphrases">Translating List of Phrases</h3>
+<p>It is also possible to translate a <em>list</em> of textual phrases with the help of the Google Translate API. The basic process is the same as discussed above. You just have to pass the list containing the phrases as a parameter to the <code>translate()</code> method. This is useful for having a batch of phrases translated separately, but all in one API call.</p>
+<p>Let's create a list of strings containing some phrases from the French language.</p>
+<pre><code class="language-python">sentences = ['Bienvenu', 'Comment allez-vous', 'je vais bien']
+</code></pre>
+<p>Now it is time to call the <code>translate()</code> method and pass the list, the source language, and the destination language as parameters.</p>
+<pre><code class="language-python">result = translator.translate(sentences, src='fr', dest='sw')
+</code></pre>
+<p>In the above script, the source language is French and the destination language is Swahili.</p>
+<p>The <code>translate()</code> method returns a list of objects if you pass a list of phrases to it. Each object in the list returned by <code>translate()</code> method corresponds to each phrase in the input list that has to be translated. The best way to find the translation of each input phrase in the list is to iterate over the list of output objects. You can then use the <code>text</code>, <code>origin</code>, <code>src</code>, and other attributes of the individual objects to see the translation of individual phrases in the input list.</p>
+<p>In the script below, we iterate over the list of objects returned by the <code>translate()</code> method and then print the origin and translated text:</p>
+<pre><code class="language-python">for trans in result:
+    print(f'{trans.origin} -&gt; {trans.text}')
+</code></pre>
+<p>The following will be the result displayed on the screen.</p>
+<pre><code class="language-plaintext">Bienvenu -&gt; karibu
+Comment allez-vous -&gt; Vipi wewe
+je vais bien -&gt; Niko sawa
+</code></pre>
+<h3 id="translatingtextdocuments">Translating Text Documents</h3>
+<p>You can also translate text documents via Google Translate API. All you have to do is to read the text file in Python using the <code>open</code> method, read the text and pass it to the <code>translate()</code> method.</p>
+<p>The first step is to open the file in the &quot;read&quot; mode:</p>
+<pre><code class="language-python">f = open('C:\\Users\\Khurram\\Desktop\\test.txt', 'r')
+</code></pre>
+<p>You can also check whether or not the file is in &quot;read&quot; mode using the <code>mode</code> property:</p>
+<pre><code class="language-python">if f.mode == 'r':
+</code></pre>
+<p>Next, you can use the <code>f.read()</code> method to read the contents of the file. The contents of the file can be stored in any variable. In our case, the name of the variable will be <code>contents.</code></p>
+<p>We will also print the <code>contents</code> variable to check whether or not Python is properly reading the text file:</p>
+<pre><code class="language-python">contents = f.read()
+print(contents)
+</code></pre>
+<p>Here is the output of the file contents:</p>
+<pre><code class="language-plaintext">We are going to translate this text file using Python.
+Subsequently, we will also translate it into French.
+</code></pre>
+<p>Make sure you have the above content in your text file if you want to follow along with our example.</p>
+<p>We have ascertained that Python is accessing and reading the text file. Now, we will translate the result by importing the same old <code>Translate</code> class from before.</p>
+<pre><code class="language-python">from googletrans import Translator
+
+file_translate = Translator()
+</code></pre>
+<p>The next step is to pass the <code>contents</code> variable containing the input text to the <code>translate()</code> function. Finally, print the <code>text</code> attribute of the object returned by the <code>translate()</code> method and you will get the translated string.</p>
+<pre><code class="language-python">result = translator.translate(contents, dest='fr')
+print(result.text)
+</code></pre>
+<p>The output should look like the following:</p>
+<pre><code class="language-plaintext">Nous allons traduire ce fichier texte en Python.
+Par la suite, nous le traduirons également en français.
+</code></pre>
+<p>To write the translated text to the same file, or a different text file, you will simply open the file in the write mode (&quot;w&quot;). Next, you need to call the <code>write()</code> method and pass it your translated text, as shown below:</p>
+<pre><code class="language-python">with open('C:\\Users\\Khurram\\Desktop\\test_2.txt', 'w') as f:
+    f.write(result.text)
+</code></pre>
+<p>In the above example, we have used the <a target="_blank'" href="/python-context-managers/">context manager</a> <code>with</code> to automatically open and close the write stream. Secondly, we have opened the file in the write mode. Lastly, we have used the <code>write()</code> method to write the translated string to a new file.</p>
+<h3 id="conclusion">Conclusion</h3>
+<p>Google Translate is a tool with an API that helps you perform a lot of different translation-related functions. We have only scratched the surface with the above examples. You are encouraged to practice the API, as well as learn and understand how to use it in real-life applications.</p>
+<!--kg-card-end: markdown-->
+					</div>
+					<footer class="post-footer clearfix">
+						<div class="pull-left tag-list">
+							<i class="fa fa-folder-open-o"></i>
+							<a href="/tag/python/">python</a>,<a href="/tag/tool/">tool</a>
+						</div>
+						<div class="pull-right share">
+							<div>
+	<ul class="share-icons">
+		<!-- twitter -->
+		<li>
+			<a aria-label="Share on Twitter" href="https://twitter.com/share?text=Text%20Translation%20with%20Google%20Translate%20API%20in%20Python&amp;url=https://stackabuse.com/text-translation-with-google-translate-api-in-python/" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;"><i class="fa fa-twitter" style="color:#55acee;"></i></a>
+		</li>
+		<!-- facebook -->
+		<li>
+			<a aria-label="Share on Facebook" href="https://www.facebook.com/sharer/sharer.php?u=https://stackabuse.com/text-translation-with-google-translate-api-in-python/" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;"><i class="fa fa-facebook" style="color:#3b5998;"></i></a>
+		</li>
+		<!-- linkedin -->
+		<li>
+			<a aria-label="Share on Linkedin" href="https://www.linkedin.com/shareArticle?mini=true%26url=https://stackabuse.com/text-translation-with-google-translate-api-in-python/%26source=https://stackabuse.com" onclick="window.open(this.href, 'linkedin-share', 'width=490,height=530');return false;"><i class="fa fa-linkedin" style="color:#0077b5;"></i></a>
+		</li>
+	</ul>
+</div>
+						</div>
+					</footer>
+                    <!-- start about the author -->
+<!-- end about the author -->
+				</article>
+                <!-- start newsletter section -->
+<div class="section">
+    <div class="newsletter text-center">
+        <h4 class="title">Subscribe to our Newsletter</h4>
+        <div class="content">
+            <form action="#" method="post" class="form-inline validate" novalidate>
+                <div class="row">
+                    <div class="col-md-9 col-md-offset-1 col-xs-12">
+                        <p>Get occassional tutorials, guides, and jobs in your inbox. No spam ever. Unsubscribe at any time.</p>
+                    </div>
+                    <div class="col-md-2 col-xs-12"></div>
+                </div>
+                <div class="row" style="margin-left: 10px;margin-right: 10px;">
+                    <div class="col-md-7 col-md-offset-1 col-xs-12" style="margin-bottom: 5px;">
+                        <label class="control-label sr-only" for="section-newsletter">Newsletter Signup</label>
+                        <input id="section-newsletter" type="email" value="" name="email" class="form-control input-lg required email" placeholder="Enter your email..." style="width:100%;">
+                    </div>
+                    <div class="col-md-3 col-xs-12" style="margin-top: 5px;">
+                        <button type="submit" name="subscribe" class="btn btn-default btn-lg btn-block btn-subscribe"
+                            ga-on="click"
+                            ga-event-category="Newsletter"
+                            ga-event-action="Signup"
+                            ga-event-label="General-Newsletter-Signup"
+                        >
+                            <i class="fa fa-spinner fa-pulse fa-fw" style="display:none;"></i>
+                            Subscribe
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <div class="message"></div>
+        </div>
+    </div>
+</div>
+<!-- end newsletter section -->
+				<div class="comment-wrap">
+					<!-- start disqus comment -->
+<div class="disqus-container">
+	<div id="disqus_thread"></div>
+	    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+<!-- end disqus comment -->
+				</div>
+				<!-- start prev next wrap -->
+<div class="prev-next-wrap clearfix">
+		<a class="btn btn-default pull-left" href="/using-sqlalchemy-with-flask-and-postgresql/" title="Using SQLAlchemy with Flask and PostgreSQL"><i class="fa fa-angle-left fa-fw"></i> Previous Post</a>
+		&nbsp;
+        <a class="btn btn-default pull-right" href="/text-classification-with-bert-tokenizer-and-tf-2-0-in-python/" title="Text Classification with BERT Tokenizer and TF 2.0 in Python">Next Post <i class="fa fa-angle-right fa-fw"></i></a>
+</div>				<!-- end post -->
+			</div>
+			<!-- end main post area -->
+			<!-- start sidebar -->
+<div class="col-md-4 sidebar">
+    <!-- start widget -->
+<div class="widget">
+	<h4 class="title">
+        Ad
+    </h4>
+    <div class="content ad" style="min-height: 250px;">
+        <!-- 300x250/300x600 -->
+<div id="waldo-tag-3874"></div>    </div>
+</div>
+<!-- end widget -->
+    <!-- start widget -->
+<div class="widget">
+    <h4 class="title">Follow Us</h4>
+    <div class="content social">
+        <div class="row">
+            <div class="col-xs-4">
+                <a rel="noopener nofollow" target="_blank" href="https://twitter.com/StackAbuse" style="color: #38A1F3;">
+                    <i class="hidden-lg hidden-md hidden-sm fa fa-twitter fa-2x"></i>
+                    <i class="hidden-xs fa fa-twitter fa-lg"></i>
+                    <span class="hidden-xs">Twitter</span>
+                </a>
+            </div>
+            <div class="col-xs-4">
+                <a rel="noopener nofollow" target="_blank" href="https://www.facebook.com/stackabuse" style="color: #3b5998;">
+                    <i class="hidden-lg hidden-md hidden-sm fa fa-facebook fa-2x"></i>
+                    <i class="hidden-xs fa fa-facebook fa-lg"></i>
+                    <span class="hidden-xs">Facebook</span>
+                </a>
+            </div>
+            <div class="col-xs-4">
+                <a target="_blank" href="https://stackabuse.com/rss/" style="color: #f7a000;">
+                    <i class="hidden-lg hidden-md hidden-sm fa fa-rss fa-2x"></i>
+                    <i class="hidden-xs fa fa-rss fa-lg"></i>
+                    <span class="hidden-xs">RSS</span>
+                </a>
+            </div>
+        </div>
+        <!-- <ul class="social">
+            <li><a href="https://twitter.com/StackAbuse"><i class="fa fa-twitter fa-lg"></i></a></li>
+            <li><a href="https://www.facebook.com/stackabuse"><i class="fa fa-facebook fa-lg"></i></a></li>
+            <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+            <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+            <li><a href="#"><i class="fa fa-skype"></i></a></li>
+            <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
+            <li><a href="#"><i class="fa fa-youtube"></i></a></li>
+            <li><a href="#"><i class="fa fa-vimeo-square"></i></a></li>
+            <li><a href="#"><i class="fa fa-dribbble"></i></a></li>
+            <li><a href="#"><i class="fa fa-flickr"></i></a></li>
+            <li><a href="#"><i class="fa fa-tumblr"></i></a></li>
+            <li><a href="https://github.com/scottwrobinson"><i class="fa fa-github"></i></a></li>
+            <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+            <li><a href="#"><i class="fa fa-stack-overflow"></i></a></li>
+            <li><a href="#"><i class="fa fa-stack-exchange"></i></a></li>
+            <li><a href="#"><i class="fa fa-xing"></i></a></li>
+            <li><a href="#"><i class="fa fa-envelope"></i></a></li>
+            <li><a href="https://stackabuse.com/rss/"><i class="fa fa-rss fa-lg"></i></a></li>
+        </ul> -->
+    </div>
+</div>
+<!-- end widget -->
+    <!-- start newsletter widget -->
+<div class="widget">
+    <h4 class="title">Newsletter</h4>
+    <div class="content newsletter">
+        <p style="font-size: 16px;">Subscribe to our newsletter! Get occassional tutorials, guides, and reviews in your inbox.</p>
+        <form action="#" method="post" class="validate" novalidate>
+            <div class="input-group">
+                <label class="control-label sr-only" for="widget-newsletter">Newsletter Signup</label>
+                <input id="widget-newsletter" type="email" value="" name="email" class="required email input-lg" placeholder="Enter your email...">
+            </div>
+            <div class="input-group">
+                <button type="submit" name="subscribe" class="btn btn-lg btn-default"
+                    ga-on="click"
+                    ga-event-category="Newsletter"
+                    ga-event-action="Signup"
+                    ga-event-label="General-Newsletter-Signup"
+                >
+                    <i class="fa fa-spinner fa-pulse fa-fw" style="display:none;"></i>
+                    Subscribe
+                </button>
+            </div>
+            <span style="color: #7f7f7f;">No spam ever. Unsubscribe at any time.</span>
+        </form>
+        <div class="message"></div>
+    </div>
+</div>
+<!-- end tag cloud widget -->
+    <!-- start widget -->
+<div class="widget">
+    <h4 class="title">
+        Ad
+    </h4>
+    <div class="content ad" style="min-height: 250px;">
+        <!-- 300x250/300x600 -->
+<div id="waldo-tag-7184"></div>
+    </div>
+</div>
+<!-- end widget -->
+    <!-- start widget -->
+<div class="widget">
+    <a rel="noopener nofollow" target="_blank"
+       class="dcp-link"
+       href="http://stackabu.se/daily-coding-problem"
+       style="text-decoration: none;"
+    >
+        <h4 class="title">Interviewing for a job?</h4>
+    </a>
+    <div class="content product">
+        <style type="text/css">
+            #product-features li {
+                margin: 5px 0;
+            }
+        </style>
+        <div id="product-features" style="font-size: 16px;line-height: 1.7em;">
+            <ul style="list-style: initial;">
+                <li>
+                    Improve your skills by solving one coding problem every day
+                </li>
+                <li>
+                    Get the solutions the next morning via email
+                </li>
+                <li>
+                    Practice on <strong>actual problems</strong> asked by top companies, like:
+                    <div style="margin: 15px 0px;">
+                        <img src="/assets/images/logo-google.svg?v=5d0826e6f1" style="height: 16px;">
+                        &nbsp;
+                        <img src="/assets/images/logo-facebook.svg?v=5d0826e6f1" style="height: 13px;margin-bottom: 3px;">
+                        &nbsp;
+                        <img src="/assets/images/logo-amazon.svg?v=5d0826e6f1" style="height: 19px;">
+                        &nbsp;
+                        <img src="/assets/images/logo-microsoft.svg?v=5d0826e6f1" style="height: 18px;">
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                <a rel="noopener nofollow" target="_blank"
+                   class="btn btn-default dcp-link"
+                   href="http://stackabu.se/daily-coding-problem"
+                >
+                    <i class="fa fa-code"></i>
+                    &nbsp;
+                    Daily Coding Problem
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end widget -->
+    <div class="widget-sticky">
+        <!-- start widget -->
+<div class="widget">
+    <a rel="noopener nofollow" target="_blank"
+       class="tb-link"
+       href="https://stackabu.se/triplebyte"
+       style="text-decoration: none;"
+    >
+        <h4 class="title">Interviewing for jobs?</h4>
+    </a>
+    <div class="content product">
+        <style type="text/css">
+            #product-features li {
+                margin: 5px 0;
+            }
+        </style>
+        <div id="product-features" style="font-size: 16px;line-height: 1.7em;">
+            <ul style="list-style: initial;">
+                <!--<li>
+                    Take the quiz once and get pre-screened for life
+                </li>
+                <li>
+                    Find your strengths and get matched to a broad range of positions
+                </li>-->
+                <li>
+                    Take Triplebyte's quiz to showcase your skills to hiring managers and recruiters.
+                </li>
+                <li>
+                    Coinbase, Plaid, Zoox, and Heap are still hiring!
+                    <div style="margin-top: 15px;flex;flex-direction:row;justify-content:space-between;">
+                        <a rel="noopener nofollow" target="_blank"
+                           class="tb-link"
+                           href="https://stackabu.se/triplebyte"
+                        >
+                            <img src="/assets/images/logo-coinbase.png?v=5d0826e6f1" style="height: 60px;margin-right: 5px;">
+                        </a>
+                        <a rel="noopener nofollow" target="_blank"
+                           class="tb-link"
+                           href="https://stackabu.se/triplebyte"
+                        >
+                            <img src="/assets/images/logo-plaid.jpg?v=5d0826e6f1" style="height: 60px;margin-right: 5px;">
+                        </a>
+                        <a rel="noopener nofollow" target="_blank"
+                           class="tb-link"
+                           href="https://stackabu.se/triplebyte"
+                        >
+                            <img src="/assets/images/logo-zoox.jpg?v=5d0826e6f1" style="height: 60px;margin-right: 5px;">
+                        </a>
+                        <a rel="noopener nofollow" target="_blank"
+                           class="tb-link"
+                           href="https://stackabu.se/triplebyte"
+                        >
+                            <img src="/assets/images/logo-heap.jpg?v=5d0826e6f1" style="height: 60px;">
+                        </a>
+                    </div>
+                </li>
+                <!--<li>
+                    Skip straight to final interviews with <strong>top tech companies</strong>, like:
+                    <a rel="noopener nofollow" target="_blank"
+                       class="tb-link"
+                       href="https://stackabu.se/triplebyte"
+                    >
+                        <div style="margin: 0px;">
+                            <img src="/assets/images/logo-robinhood.svg?v=5d0826e6f1" style="height: 60px;">
+                            <img src="/assets/images/logo-dropbox.svg?v=5d0826e6f1" style="height: 60px;">
+                            <img src="/assets/images/logo-adobe.svg?v=5d0826e6f1" style="height: 60px;">
+                        </div>
+                    </a>
+                </li>-->
+            </ul>
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                <a rel="noopener nofollow" target="_blank"
+                   class="btn btn-default tb-link"
+                   href="https://stackabu.se/triplebyte"
+                >
+                    <i class="fa fa-code"></i>
+                    &nbsp;
+                    Take Triplebyte's Quiz
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end widget -->
+        <!-- start widget -->
+<div class="widget">
+    <h4 class="title">Want a remote job?</h4>
+    <div class="content jobs hr">
+        <ul style="margin-bottom: 0px;">
+        </ul>
+        <div class="row">
+            <div class="col-md-4">
+                <strong>
+                    <a rel="noopener nofollow" target="_blank"
+                       class="btn btn-default"
+                       href="https://hireremote.io"
+                       style="margin-top: 10px;"
+                       ga-on="click"
+                       ga-event-category="Jobs"
+                       ga-event-action="Click"
+                       ga-event-label="HR-More-Link"
+                    >
+                        <i class="fa fa-arrow-circle-right"></i>&nbsp; More jobs
+                    </a>
+                </strong>
+            </div>
+            <div class="col-md-8 text-right" style="margin-top: 18px;">
+                Jobs via
+                <a rel="noopener nofollow" target="_blank" href="https://hireremote.io"
+                   class="hr-link"
+                   style="color: #f16334;"
+                >
+                    HireRemote.io
+                </a>
+            </div>
+            <!-- <div class="col-md-9 text-right">
+                <span>Jobs by</span>
+                <a
+                    rel="noopener nofollow" target="_blank"
+                    href="https://www.hireremote.io/"
+                    id="jobs_widget_link"
+                    ga-on="click"
+                    ga-event-category="Jobs"
+                    ga-event-action="Click"
+                    ga-event-label="HR-Jobs-By"
+                >
+                    <span id="hr_logo_container">
+                        <img
+                            id="hr_logo"
+                            src="https://www.ziprecruiter.com/img/logos/logo-sm-black-304px.png" alt="HireRemote.io"
+                            width="100"
+                        />
+                    </span>
+                </a>
+            </div> -->
+        </div>
+    </div>
+</div>
+<!-- end widget -->
+    </div>
+</div>
+<!-- end sidebar -->
+		</div>
+	</div>
+</section>
+<!-- end site's main content area -->
+
+
+	<!-- start main-footer -->
+	<footer class="main-footer">
+		<div class="container">
+			<div class="row">
+				<!-- start first footer widget area -->
+				<div class="col-sm-4">
+					<!-- start widget -->
+<div class="widget">
+    <h4 class="title">Recent Posts</h4>
+    <div class="content recent-post">
+        <div class="recent-single-post">
+            <a href="/guide-to-spring-cloud-task-short-lived-spring-boot-microservices/" class="post-title">Guide to Spring Cloud Task: Short-Lived Spring Boot Microservices</a>
+            <!--<div class="date">April 13, 2020</div>-->
+        </div>
+        <div class="recent-single-post">
+            <a href="/reading-and-writing-json-files-in-python-with-pandas/" class="post-title">Reading and Writing JSON Files in Python with Pandas</a>
+            <!--<div class="date">April 10, 2020</div>-->
+        </div>
+        <div class="recent-single-post">
+            <a href="/the-singleton-design-pattern-in-python/" class="post-title">The Singleton Design Pattern in Python</a>
+            <!--<div class="date">April 08, 2020</div>-->
+        </div>
+    </div>
+</div>
+<!-- end widget -->				</div>
+				<!-- end first footer widget area -->
+				<!-- start second footer widget area -->
+				<div class="col-sm-4">
+					<!-- start tag cloud widget -->
+<div class="widget">
+    <h4 class="title">Tags</h4>
+    <div class="content tag-cloud">
+        <a href="/tag/algorithms/">algorithms</a><a href="/tag/amqp/">amqp</a><a href="/tag/angular/">angular</a><a href="/tag/announcements/">announcements</a><a href="/tag/apache/">apache</a><a href="/tag/api/">api</a><a href="/tag/arduino/">arduino</a><a href="/tag/artificial-intelligence/">artificial intelligence</a><a href="/tag/asynchronous/">asynchronous</a><a href="/tag/aws/">aws</a>
+    </div>
+</div>
+<!-- end tag cloud widget -->
+				</div>
+				<!-- end second footer widget area -->
+				<!-- start third footer widget area -->
+				<div class="col-sm-4">
+					<!-- start widget -->
+<div class="widget">
+    <h4 class="title">Follow Us</h4>
+    <div class="content social">
+        <div class="row">
+            <div class="col-xs-4">
+                <a rel="noopener nofollow" target="_blank" href="https://twitter.com/StackAbuse" style="color: #38A1F3;">
+                    <i class="hidden-lg hidden-md hidden-sm fa fa-twitter fa-2x"></i>
+                    <i class="hidden-xs fa fa-twitter fa-lg"></i>
+                    <span class="hidden-xs">Twitter</span>
+                </a>
+            </div>
+            <div class="col-xs-4">
+                <a rel="noopener nofollow" target="_blank" href="https://www.facebook.com/stackabuse" style="color: #3b5998;">
+                    <i class="hidden-lg hidden-md hidden-sm fa fa-facebook fa-2x"></i>
+                    <i class="hidden-xs fa fa-facebook fa-lg"></i>
+                    <span class="hidden-xs">Facebook</span>
+                </a>
+            </div>
+            <div class="col-xs-4">
+                <a target="_blank" href="https://stackabuse.com/rss/" style="color: #f7a000;">
+                    <i class="hidden-lg hidden-md hidden-sm fa fa-rss fa-2x"></i>
+                    <i class="hidden-xs fa fa-rss fa-lg"></i>
+                    <span class="hidden-xs">RSS</span>
+                </a>
+            </div>
+        </div>
+        <!-- <ul class="social">
+            <li><a href="https://twitter.com/StackAbuse"><i class="fa fa-twitter fa-lg"></i></a></li>
+            <li><a href="https://www.facebook.com/stackabuse"><i class="fa fa-facebook fa-lg"></i></a></li>
+            <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+            <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+            <li><a href="#"><i class="fa fa-skype"></i></a></li>
+            <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
+            <li><a href="#"><i class="fa fa-youtube"></i></a></li>
+            <li><a href="#"><i class="fa fa-vimeo-square"></i></a></li>
+            <li><a href="#"><i class="fa fa-dribbble"></i></a></li>
+            <li><a href="#"><i class="fa fa-flickr"></i></a></li>
+            <li><a href="#"><i class="fa fa-tumblr"></i></a></li>
+            <li><a href="https://github.com/scottwrobinson"><i class="fa fa-github"></i></a></li>
+            <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+            <li><a href="#"><i class="fa fa-stack-overflow"></i></a></li>
+            <li><a href="#"><i class="fa fa-stack-exchange"></i></a></li>
+            <li><a href="#"><i class="fa fa-xing"></i></a></li>
+            <li><a href="#"><i class="fa fa-envelope"></i></a></li>
+            <li><a href="https://stackabuse.com/rss/"><i class="fa fa-rss fa-lg"></i></a></li>
+        </ul> -->
+    </div>
+</div>
+<!-- end widget -->
+				</div>
+				<!-- end third footer widget area -->
+			</div>
+		</div>
+	</footer>
+	<!-- end main-footer -->
+	<!-- start copyright section -->
+<div class="copyright">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12">
+				Copyright &copy; 2020, <a href="https://stackabuse.com">Stack Abuse</a>.  All Rights Reserved.
+			</div>
+		</div>
+	</div>
+</div>
+<!-- end copyright section -->	<div class="footer-links">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-12">
+					<a href="/disclosure">Disclosure</a>
+					•
+					<a href="/privacy-policy">Privacy Policy</a>
+					•
+					<a href="/terms-of-service">Terms of Service</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<a aria-label="Back to Top" href="#" id="back-to-top"><i class="fa fa-angle-up"></i></a>
+	<!--
+<script src="//my.hellobar.com/4dd9990be00532b0fc7961824b7d7a0930e9e2b7.js" type="text/javascript" charset="utf-8" async="async"></script>
+-->
+	<!-- scripts -->
+    <script id="dsq-count-scr" src="//stackabuse.disqus.com/count.js" async></script>
+    <script>
+      var disqus_config = function() {
+        this.page.url = window.location.href;
+        this.page.identifier = window.location.href;
+        this.callbacks.onReady = [function() {
+          if (window.onDisqusReady) {
+            window.onDisqusReady();
+          }
+        }];
+      };
+      var disqus_script_url = 'https://stackabuse.disqus.com/embed.js';
+    </script>
+
+    <!-- HTML templates for use in JS code -->
+    <script id="newsletter-template" type="text/x-custom-template">
+        <!-- start newsletter section -->
+<div class="section">
+    <div class="newsletter text-center">
+        <h4 class="title">Subscribe to our Newsletter</h4>
+        <div class="content">
+            <form action="#" method="post" class="form-inline validate" novalidate>
+                <div class="row">
+                    <div class="col-md-9 col-md-offset-1 col-xs-12">
+                        <p>Get occassional tutorials, guides, and jobs in your inbox. No spam ever. Unsubscribe at any time.</p>
+                    </div>
+                    <div class="col-md-2 col-xs-12"></div>
+                </div>
+                <div class="row" style="margin-left: 10px;margin-right: 10px;">
+                    <div class="col-md-7 col-md-offset-1 col-xs-12" style="margin-bottom: 5px;">
+                        <label class="control-label sr-only" for="section-newsletter">Newsletter Signup</label>
+                        <input id="section-newsletter" type="email" value="" name="email" class="form-control input-lg required email" placeholder="Enter your email..." style="width:100%;">
+                    </div>
+                    <div class="col-md-3 col-xs-12" style="margin-top: 5px;">
+                        <button type="submit" name="subscribe" class="btn btn-default btn-lg btn-block btn-subscribe"
+                            ga-on="click"
+                            ga-event-category="Newsletter"
+                            ga-event-action="Signup"
+                            ga-event-label="General-Newsletter-Signup"
+                        >
+                            <i class="fa fa-spinner fa-pulse fa-fw" style="display:none;"></i>
+                            Subscribe
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <div class="message"></div>
+        </div>
+    </div>
+</div>
+<!-- end newsletter section -->
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" type="text/javascript"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/dockerfile.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/yaml.min.js"></script>
+    <script src="/assets/js/bootstrap-custom.min.js?v=5d0826e6f1" async></script>
+	<script src="/assets/js/main.min.js?v=5d0826e6f1" async></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript" async></script>
+	<!-- Add your analytic code below -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  if (window.location.hostname !== 'localhost') {
+    ga('create', 'UA-43140675-1', 'auto');
+    ga('require', 'eventTracker');
+    ga('send', 'pageview');
+  }
+
+</script>
+<script async=true src="//cdnjs.cloudflare.com/ajax/libs/autotrack/1.0.1/autotrack.js"></script>
+</body>
+</html>
